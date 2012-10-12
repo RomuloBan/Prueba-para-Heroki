@@ -3,10 +3,11 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes');
+var express = require('express'),
+	app = express.createServer(),
+    user = require('./routes/users');
 
-var app = module.exports = express.createServer();
+
 
 // Configuration
 
@@ -28,8 +29,15 @@ app.configure('production', function(){
 });
 
 // Routes
+app.get("/profile/:id", user.show);
+app.get("/edit", user.add);
+app.get("/edit/:id", user.edit);
+app.post("/save", user.save);
+app.post("/delet/:id", user.del);
+app.get("/", function(req, res) {
+	res.render("index", {title:"Hello world"});
+});
 
-app.get('/', routes.index);
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
